@@ -15,6 +15,9 @@
 
     <aside class="col-side">
       <form id="filters-form" class="filters-panel">
+        <div class="filter-actions" style="margin-bottom:8px; grid-template-columns: 1fr;">
+          <button type="button" id="refresh-players" class="btn">Atualizar 4 frames</button>
+        </div>
         <div class="favorites-toggle-wrap">
           <label class="btn favorites-toggle-btn" for="onlyFavorites">
             <input id="onlyFavorites" type="checkbox">
@@ -109,6 +112,7 @@
     const statusEl = document.getElementById('status');
     const errorEl = document.getElementById('error');
     const playersGridEl = document.getElementById('players-grid');
+    const refreshPlayersBtn = document.getElementById('refresh-players');
     const filtersForm = document.getElementById('filters-form');
     const clearFiltersBtn = document.getElementById('clear-filters');
     const onlyFavoritesEl = document.getElementById('onlyFavorites');
@@ -201,6 +205,61 @@
       }).join('');
     }
 
+    function setActiveSlot(newActiveSlot) {
+      activeSlot = Number(newActiveSlot || 0);
+      playersGridEl.querySelectorAll('.player-card').forEach((card, index) => {
+        card.classList.toggle('active-target', index === activeSlot);
+      });
+      playersGridEl.querySelectorAll('.player-side').forEach((side, index) => {
+        side.classList.toggle('active', index === activeSlot);
+      });
+    }
+
+    function updateSlotFrame(slotIndex, forceRefresh) {
+      const slot = slots[slotIndex];
+      const card = playersGridEl.querySelector('[data-slot="' + slotIndex + '"]');
+      if (!card || !slot) {
+        return;
+      }
+
+      const stage = card.querySelector('.player-stage');
+      if (!stage) {
+        return;
+      }
+
+      if (!slot.src) {
+        stage.innerHTML = '<div class="player-placeholder">Clique em Selecionar e depois em uma thumb.</div>';
+        return;
+      }
+
+      const iframe = stage.querySelector('iframe.player');
+      if (iframe) {
+        const targetSrc = forceRefresh ? withRefreshParam(slot.src) : slot.src;
+        iframe.src = targetSrc;
+        return;
+      }
+
+      const iframeSrc = forceRefresh ? withRefreshParam(slot.src) : slot.src;
+      stage.innerHTML = '<iframe class="player" src="' + escapeHtml(iframeSrc) + '" title="Player ' + (slotIndex + 1) + '" loading="lazy" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe>';
+    }
+
+    function withRefreshParam(src) {
+      try {
+        const url = new URL(src, window.location.href);
+        url.searchParams.set('_r', Date.now().toString());
+        return url.toString();
+      } catch (_err) {
+        const sep = src.includes('?') ? '&' : '?';
+        return src + sep + '_r=' + Date.now();
+      }
+    }
+
+    function refreshAllFrames() {
+      for (let i = 0; i < slots.length; i += 1) {
+        updateSlotFrame(i, true);
+      }
+    }
+
     function selectModelToActiveSlot(username) {
       const model = currentModels.find((m) => (m.username || '').toLowerCase() === String(username || '').toLowerCase());
       if (!model || !model.embed_src) {
@@ -211,7 +270,7 @@
         username: model.username,
         src: model.embed_src
       };
-      renderPlayers();
+      updateSlotFrame(activeSlot, false);
 
       document.querySelectorAll('.item').forEach((item) => {
         item.classList.toggle('active', item.dataset.username === model.username.toLowerCase());
@@ -249,8 +308,7 @@
       if (!side) {
         return;
       }
-      activeSlot = Number(side.dataset.selectSlot || 0);
-      renderPlayers();
+      setActiveSlot(Number(side.dataset.selectSlot || 0));
       statusEl.textContent = 'Slot ' + (activeSlot + 1) + ' selecionado • clique em uma thumb para enviar o video';
     });
 
@@ -263,9 +321,13 @@
         return;
       }
       event.preventDefault();
-      activeSlot = Number(side.dataset.selectSlot || 0);
-      renderPlayers();
+      setActiveSlot(Number(side.dataset.selectSlot || 0));
       statusEl.textContent = 'Slot ' + (activeSlot + 1) + ' selecionado • clique em uma thumb para enviar o video';
+    });
+
+    refreshPlayersBtn.addEventListener('click', () => {
+      refreshAllFrames();
+      statusEl.textContent = '4 frames atualizadas manualmente • slot ativo: ' + (activeSlot + 1);
     });
 
     listEl.addEventListener('click', (event) => {
@@ -353,7 +415,8 @@
     });
 
     renderPlayers();
-  syncFavoritesToggleVisualState();
+    setActiveSlot(activeSlot);
+    syncFavoritesToggleVisualState();
     load();
     setInterval(load, REFRESH_MS);
   </script>
