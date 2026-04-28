@@ -19,12 +19,19 @@
           <button type="button" id="toggle-filters" class="btn">Minimizar filtros</button>
         </div>
         <div class="filters-grid">
-          <div class="filter-group">
-            <label for="sort">Ordenacao</label>
-            <select id="sort" name="sort" class="filter-control">
-              <option value="viewers">Mais views</option>
-              <option value="recent">Mais recentes</option>
-            </select>
+          <div class="filter-row">
+            <div class="filter-group">
+              <label for="sort">Ordenacao</label>
+              <select id="sort" name="sort" class="filter-control">
+                <option value="viewers">Mais views</option>
+                <option value="recent">Mais recentes</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="tag">Tag</label>
+              <input id="tag" name="tag" class="filter-control" placeholder="ex: new">
+            </div>
           </div>
 
           <div class="filter-group">
@@ -40,20 +47,12 @@
 
           <input type="hidden" name="gender" value="f">
 
-          <div class="filter-group">
-            <label for="tag">Tag</label>
-            <input id="tag" name="tag" class="filter-control" placeholder="ex: new">
-          </div>
-
           <div class="filter-row">
             <div class="filter-group">
               <label for="maxAge">Idade max</label>
               <input id="maxAge" name="maxAge" type="number" min="18" max="99" class="filter-control" value="99">
             </div>
-            <div class="filter-group"></div>
-          </div>
 
-          <div class="filter-row">
             <div class="filter-group">
               <label for="current_show">Show</label>
               <select id="current_show" name="current_show" class="filter-control">
@@ -64,7 +63,6 @@
                 <option value="away">Away</option>
               </select>
             </div>
-            <div class="filter-group"></div>
           </div>
 
           <div class="filter-row">
@@ -76,15 +74,11 @@
                 <option value="false">Nao novas</option>
               </select>
             </div>
-            <div class="filter-group"></div>
-          </div>
 
-          <div class="filter-row">
             <div class="filter-group">
               <label for="tokenMin">Token min</label>
               <input id="tokenMin" name="tokenMin" type="number" min="0" class="filter-control" placeholder="0">
             </div>
-            <div class="filter-group"></div>
           </div>
 
           <div class="filter-actions">
