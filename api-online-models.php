@@ -70,6 +70,11 @@ foreach ($regions as $region) {
             continue;
         }
 
+        $currentShow = strtolower((string)($m['current_show'] ?? ''));
+        if ($currentShow === 'offline') {
+            continue;
+        }
+
         if (empty($m['iframe_embed_revshare'])) {
             continue;
         }

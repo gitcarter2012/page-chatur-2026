@@ -1,0 +1,239 @@
+:root {
+  --bg: #05070a;
+  --panel: #0d1219;
+  --panel-alt: #131925;
+  --text: #e8edf6;
+  --muted: #93a0b4;
+  --line: #263246;
+  --accent: #16c784;
+  --danger: #e75f5f;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  overflow: hidden;
+}
+
+.layout {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 9fr 3fr;
+  gap: 0;
+}
+
+.col-main {
+  min-width: 0;
+  height: 100%;
+  border-right: 1px solid var(--line);
+  background: #05070a;
+  padding: 8px;
+}
+
+.players-grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  align-content: stretch;
+  gap: 8px;
+}
+
+.player-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #070b12;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 62px;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.player-card.active-target {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(22, 199, 132, 0.5);
+}
+
+.player-side {
+  border-left: 1px solid var(--line);
+  background: #101722;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.player-side:hover {
+  background: #162030;
+}
+
+.player-side.active {
+  border-color: var(--accent);
+  background: rgba(22, 199, 132, 0.15);
+}
+
+.player-stage {
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+
+.player {
+  width: 180%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #000;
+}
+
+.player-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--muted);
+  padding: 24px;
+}
+
+.col-side {
+  height: 100%;
+  background: linear-gradient(180deg, var(--panel), var(--panel-alt));
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #43516a transparent;
+}
+
+.col-side::-webkit-scrollbar {
+  width: 8px;
+}
+
+.col-side::-webkit-scrollbar-thumb {
+  background: #43516a;
+  border-radius: 99px;
+}
+
+.status {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 8px;
+  margin: -8px -8px 8px;
+  background: rgba(18, 22, 31, 0.95);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+
+.error {
+  display: none;
+  margin: 0 0 10px;
+  padding: 8px;
+  border: 1px solid rgba(231, 95, 95, 0.7);
+  border-radius: 8px;
+  background: rgba(231, 95, 95, 0.15);
+  color: #ffe8e8;
+  font-size: 12px;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0f141d;
+  cursor: pointer;
+  transition: border-color .15s ease, transform .15s ease;
+  outline: none;
+}
+
+.item:hover,
+.item:focus-visible {
+  border-color: #4c5b76;
+  transform: translateY(-1px);
+}
+
+.item.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(25, 195, 125, 0.45);
+}
+
+.thumb {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  background: #0a0d12;
+}
+
+.meta {
+  padding: 6px;
+  display: grid;
+  gap: 3px;
+}
+
+.name {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+}
+
+.time {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.empty {
+  border: 1px dashed #4c5770;
+  border-radius: 10px;
+  padding: 14px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 65vh 35vh;
+  }
+
+  .col-main {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .players-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+  }
+
+  .player-card {
+    max-width: 100%;
+  }
+
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
