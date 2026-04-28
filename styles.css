@@ -258,6 +258,47 @@ html, body {
   gap: 6px;
 }
 
+.favorites-toggle-wrap {
+  margin-bottom: 8px;
+}
+
+.favorites-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  justify-content: center;
+  padding: 10px 12px;
+  user-select: none;
+}
+
+.favorites-toggle-btn input {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #566584;
+  border-radius: 3px;
+  background: #0f141d;
+  pointer-events: none;
+}
+
+.favorites-toggle-btn input:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.favorites-toggle-btn input:checked + .favorites-toggle-label {
+  color: #d8f7ea;
+}
+
+.favorites-toggle-btn.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(22, 199, 132, 0.35);
+}
+
 .filter-chip {
   display: inline-flex;
   align-items: center;
